@@ -46,10 +46,10 @@ public class BulletinServiceImpl implements BulletinService {
     public BulletinDto createOrUpdateBulletin(BulletinDto bulletinDto) throws EntityNotFoundException {
         User user = userRepository.findById(bulletinDto.getAuthor().getId())
                 .orElseThrow(()->new EntityNotFoundException(String.format("user with id: %s not found", bulletinDto.getAuthor().getId())));
-        Optional<Bulletin> bulletinOptional = bulletinRepository.findById(bulletinDto.getId());
+        Bulletin bulletin = bulletinRepository.findByTitle(bulletinDto.getTitle());
 
-        if(bulletinOptional.isEmpty()){
-            Bulletin bulletin = new Bulletin(bulletinDto.getId(),
+        if(bulletin == null){
+             bulletin = new Bulletin(bulletinDto.getId(),
                     bulletinDto.getTitle(),
                     bulletinDto.getDescription(),
                     bulletinDto.getStartDate(),
@@ -60,8 +60,8 @@ public class BulletinServiceImpl implements BulletinService {
                 return mapToBulletinDto.apply(bulletin);
             }
         }
-        bulletinRepository.save(bulletinOptional.get());
-        return mapToBulletinDto.apply(bulletinOptional.get());
+        bulletinRepository.save(bulletin);
+        return mapToBulletinDto.apply(bulletin);
     }
 
 

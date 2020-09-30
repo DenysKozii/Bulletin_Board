@@ -2,7 +2,7 @@ Bulletin Board
 
 Application for posting and reading bulletins in the easiest way. 
 Your account will be in safe because of encrypting all passwords!
-System totally under tests and without bugs!!!  
+System almost under tests and without bugs)  
 
 To build the project following requirements should be met:
 * Installed Oracle JDK 11

@@ -63,7 +63,7 @@ public class BulletinServiceTest {
         bulletin.setId(1L);
 
         doReturn(Optional.of(user)).when(userRepository).findById(1L);
-        doReturn(Optional.of(bulletin)).when(bulletinRepository).findById(1L);
+        doReturn(bulletin).when(bulletinRepository).findByTitle("First");
 
         doReturn(Collections.singletonList(bulletin)).when(bulletinRepository).findAll();
         doReturn(new Page<Bulletin>() {
