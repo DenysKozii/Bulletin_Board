@@ -8,7 +8,7 @@ To build the project following requirements should be met:
 * Installed Oracle JDK 11
 
 Internally I use:
-* In memory h2 database for easy start 
+* In-memory h2 database for easy start 
 
 To assemble JAR, in the project root directory run:
 ```bash
