@@ -1,30 +1,27 @@
 package com.denyskozii.bulletinboard.model;
 
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Date: 28.09.2020
  *
  * @author Denys Kozii
  */
-
 @Entity
 @Data
 @Table(name = "user")
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class User{
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,7 +44,7 @@ public class User{
     @NonNull
     @NotBlank(message = "Must not be empty")
     @Pattern(regexp = ".+@.+\\..+", message = "Please provide a valid email address")
-    @Column(name = "email",unique = true)
+    @Column(name = "email", unique = true)
     private String email;
 
     @NonNull
@@ -69,7 +66,4 @@ public class User{
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private List<Bulletin> bulletins = new ArrayList<>();
-
-    private boolean active;
-
 }

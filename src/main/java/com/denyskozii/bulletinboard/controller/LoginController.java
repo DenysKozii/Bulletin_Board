@@ -2,16 +2,16 @@ package com.denyskozii.bulletinboard.controller;
 
 import com.denyskozii.bulletinboard.dto.UserDto;
 import com.denyskozii.bulletinboard.model.Role;
-import com.denyskozii.bulletinboard.model.User;
-import com.denyskozii.bulletinboard.service.impl.UserServiceImpl;
+import com.denyskozii.bulletinboard.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 
 /**
  * Date: 28.09.2020
@@ -19,30 +19,36 @@ import java.util.ArrayList;
  * @author Denys Kozii
  */
 @Controller
+@Slf4j
 public class LoginController {
     @Autowired
-    UserServiceImpl userServiceimpl;
+    UserService userService;
 
     @PostMapping("/registration")
     public String addUser(@Valid UserDto user, Errors errors, Model model) {
+        log.info("Register user " + user);
         if(user.getPassword().length()<5){
+            log.warn("Password is not strong enough");
             model.addAttribute("message", "Password is not strong enough");
             return "registration";
         }
         if (errors.hasErrors()) {
+            log.error(errors.toString());
             model.addAttribute("error", true);
             return "registration";
         }
         if (!user.getPassword().equals(user.getConfirmPassword())) {
+            log.warn("Check your password confirmation");
             model.addAttribute("message", "Check your password confirmation");
             return "registration";
         }
-        user.setActive(true);
         user.setRole(Role.USER);
-        boolean addUser = userServiceimpl.register(user);
+        boolean addUser = userService.register(user);
         if (addUser) {
+            log.warn(String.format("Register user %s successfully!",user));
             return "redirect:/form-login";
         }
+        log.error(String.format("User %s already exists!",user));
         model.addAttribute("message", "User already exists!");
         return "login";
     }
@@ -51,34 +57,4 @@ public class LoginController {
     public String register() {
         return "registration";
     }
-
-
-//    @PostMapping("/form-login")
-//    public String login(@RequestParam String email, @RequestParam String password, Model model) {
-//        boolean addUser = userServiceimpl.login(email,password);
-//        System.out.println("login------------");
-//        System.out.println("login------------");
-//        System.out.println("login------------");
-//        System.out.println("login------------");
-//        System.out.println("login------------");
-//        if (addUser) {
-//            UserDto user = userServiceimpl.getUserByEmail(email);
-//            Long userId = user.getId();
-//            model.addAttribute("userId", userId);
-//            System.out.println(userId);
-//            return "user/account/{userId}";
-//        }
-//        model.addAttribute("message", "User already exists!");
-//        return "login";
-//    }
-//
-//    @GetMapping("/form-login")
-//    public String login() {
-//        System.out.println("login------------");
-//        System.out.println("login------------");
-//        System.out.println("login------------");
-//        System.out.println("login------------");
-//        System.out.println("login------------");
-//        return "login";
-//    }
 }

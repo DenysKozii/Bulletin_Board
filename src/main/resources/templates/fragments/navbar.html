@@ -5,7 +5,6 @@
 
 <body>
 
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light" sec:authorize="isAuthenticated()">
     <a class="navbar-brand" href="#">Board</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
@@ -14,11 +13,21 @@
 
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li th:classappend="${#request.requestURI.startsWith('/bulletin') ? 'active':''}" class="nav-item">
-                <a class="nav-link" th:href="${'/bulletin'}">Home</a>
+            <li th:classappend="${#request.requestURI.contains('bulletin') ? 'active':''}" class="nav-item">
+                <div th:if="${#request.requestURI.contains('bulletin')}">
+                    <a class="nav-link" th:href="${'/bulletin'}" onclick="return false">Home</a>
+                </div>
+                <div th:unless="${#request.requestURI.contains('bulletin')}">
+                    <a class="nav-link" th:href="${'/bulletin'}" >Home</a>
+                </div>
             </li>
-            <li th:classappend="${#request.requestURI == '/' ? 'active':''}" class="nav-item">
-                <a class="nav-link" th:href="@{/user}">Account</a>
+            <li th:classappend="${#request.requestURI.contains('user') ? 'active':''}" class="nav-item">
+                <div th:if="${#request.requestURI.contains('user')}">
+                    <a class="nav-link" th:href="@{/user}" onclick="return false">Account</a>
+                </div>
+                <div th:unless="${#request.requestURI.contains('user')}">
+                    <a class="nav-link" th:href="@{/user}">Account</a>
+                </div>
             </li>
         </ul>
         <div class="my-2 my-lg-0">

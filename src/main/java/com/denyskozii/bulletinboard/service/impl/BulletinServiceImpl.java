@@ -9,17 +9,14 @@ import com.denyskozii.bulletinboard.service.BulletinService;
 import com.denyskozii.bulletinboard.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validator;
-import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Date: 28.09.2020
@@ -32,9 +29,8 @@ public class BulletinServiceImpl implements BulletinService {
 
     private final BulletinRepository bulletinRepository;
     private final UserRepository userRepository;
-//    @Autowiredred
-    private UserService userService;
     private final Validator validator;
+    private UserService userService;
 
     @Autowired
     public BulletinServiceImpl(BulletinRepository bulletinRepository, UserRepository userRepository, UserService userService, Validator validator) {
@@ -46,19 +42,6 @@ public class BulletinServiceImpl implements BulletinService {
 
     @Override
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public Page<BulletinDto> getPage(Pageable pageable) {
-//        Page<Bulletin> page = bulletinRepository.getPage(pageable);
-//        return new PageImpl<>(page.getContent().stream().map(mapToBulletinDto).collect(Collectors.toList()), pageable, page.getTotalElements());
-    return null;
-    }
-
-    @Override
-    public BulletinDto getBulletinById(Long id) {
-        return mapToBulletinDto.apply(bulletinRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Marathon with id " + id + " doesn't exists!")));
-    }
-
-    @Override
     public BulletinDto createOrUpdateBulletin(BulletinDto bulletinDto) throws EntityNotFoundException {
         User user = userRepository.findById(bulletinDto.getAuthor().getId())
                 .orElseThrow(()->new EntityNotFoundException(String.format("user with id: %s not found", bulletinDto.getAuthor().getId())));
@@ -66,6 +49,7 @@ public class BulletinServiceImpl implements BulletinService {
                 bulletinDto.getTitle(),
                 bulletinDto.getDescription(),
                 bulletinDto.getStartDate(),
+                bulletinDto.getImage(),
                 user);
         if (validator.validate(bulletin).size() == 0) {
             bulletinRepository.save(bulletin);
@@ -75,10 +59,10 @@ public class BulletinServiceImpl implements BulletinService {
         return mapToBulletinDto.apply(bulletin);
     }
 
+
     @Override
-    public BulletinDto getBulletinByTitle(String title) {
-        Bulletin bulletin = bulletinRepository.findByTitle(title);
-        return bulletin == null ? null : mapToBulletinDto.apply(bulletin);
+    public Page<Bulletin> getPage(PageRequest pagesRequest) {
+        return bulletinRepository.findAll(pagesRequest);
     }
 
     Function<Bulletin, BulletinDto> mapToBulletinDto = (bulletin -> BulletinDto.builder()

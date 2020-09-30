@@ -5,7 +5,6 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
-import java.util.Date;
 
 /**
  * Date: 28.09.2020
@@ -17,7 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @RequiredArgsConstructor
-@Table(name = "boards")
+@Table(name = "bulletin")
 public class Bulletin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +35,8 @@ public class Bulletin {
     @Column(name = "start_date", columnDefinition = "DATE")
     private LocalDate startDate;
 
+    @Column(length = 45, nullable = true, name = "image")
+    private String image;
 
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {

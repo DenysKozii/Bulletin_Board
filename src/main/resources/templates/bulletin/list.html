@@ -12,32 +12,16 @@
 <div th:replace="fragments/navbar :: nav"></div>
 <div class="container">
     <h2>Bulletin List</h2>
-<!--        <div class="card">-->
             <div class="card" th:each="bulletin :${data.content}">
                 <div class="details" >
                     <div class="title" th:text="${bulletin.title}"/>
                     <div class="description" th:text="${bulletin.description}"/>
                     <div class="signature" th:text="${bulletin.author.lastName + ' on ' + bulletin.startDate}"/>
                 </div>
+                <div class="image">
+                    <img th:src="@{${bulletin.image}}">
+                </div>
             </div>
-<!--            <div class="card-block">-->
-<!--                <table class="table table-hover">-->
-<!--                    <thead>-->
-<!--                        <tr>-->
-<!--                            <th>Title</th>-->
-<!--                            <th>Desc</th>-->
-<!--                        </tr>-->
-<!--                    </thead>-->
-<!--                    <tbody>-->
-<!--                        <tr th:each="bulletin :${data.content}">-->
-<!--                            <td th:text="${bulletin.title}"></td>-->
-<!--                            <td th:text="${bulletin.description}"></td>-->
-<!--                        </tr>-->
-<!--                    </tbody>-->
-<!--                </table>-->
-<!--                <hr/>-->
-
-<!--            </div>-->
             <ul class="nav nav-pills " th:if="${data.totalPages > 1}">
                 <li class="nav-item"
                     th:each="i :${#numbers.sequence(1,data.totalPages)}">
@@ -45,7 +29,6 @@
                        th:classappend="${currentPage}==${i}?'active':''"></a>
                 </li>
             </ul>
-<!--    </div>-->
 
 </div>
 <div th:replace="fragments/footer :: footer"></div>

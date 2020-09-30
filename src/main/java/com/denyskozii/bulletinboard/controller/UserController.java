@@ -12,7 +12,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -36,44 +39,26 @@ public class UserController {
 
     @GetMapping
     public String account(HttpServletRequest request, Model model) {
-//        Long userId = Long.valueOf(request.getUserPrincipal().getName());
-//        log.info("Get user by id " + userId);
-//        UserDto userDto = userService.getUserById(userId);
+        log.info("controller account");
         Object userDto = ((UsernamePasswordAuthenticationToken)request.getUserPrincipal()).getPrincipal();
         model.addAttribute("user", userDto);
         model.addAttribute("bulletin", new BulletinDto());
+        log.info("Return information about " + userDto);
         return "user/account";
     }
-
-    @GetMapping("/edit")
-    public String editUserForm(HttpServletRequest request, Model model) {
-        Long userId = Long.valueOf(request.getUserPrincipal().getName());
-        log.info("Get user by id " + userId);
-        UserDto userDto = userService.getUserById(userId);
-        model.addAttribute("user", userDto);
-        return "user/edit";
-    }
-
 
     @PostMapping("/edit")
     public String editUserFormSubmit(@Valid @ModelAttribute("user") UserDto userDto,
                                         BindingResult bindingResult) {
+        log.info("controller edit");
         if (bindingResult.hasErrors()) {
             log.error("Error(s) updating user id " + userDto.getId() + ": " + bindingResult.getAllErrors());
-            return "user/edit";
+            return "user/account";
         }
         userService.updateUser(userDto);
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDto, userDto.getPassword(), userDto.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         log.info("Updating user id: " + userDto.getId());
         return "redirect:/user";
-    }
-
-    /**
-     * test connection.
-     */
-    @GetMapping("/hello")
-    public String hello() {
-        return "hello";
     }
 }
