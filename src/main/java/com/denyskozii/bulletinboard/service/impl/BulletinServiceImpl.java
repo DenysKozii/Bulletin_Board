@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validator;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -29,15 +30,15 @@ public class BulletinServiceImpl implements BulletinService {
 
     private final BulletinRepository bulletinRepository;
     private final UserRepository userRepository;
-    private final Validator validator;
+    @Autowired
+    private Validator validator;
+    @Autowired
     private UserService userService;
 
     @Autowired
-    public BulletinServiceImpl(BulletinRepository bulletinRepository, UserRepository userRepository, UserService userService, Validator validator) {
+    public BulletinServiceImpl(BulletinRepository bulletinRepository, UserRepository userRepository) {
         this.bulletinRepository = bulletinRepository;
         this.userRepository = userRepository;
-        this.userService = userService;
-        this.validator = validator;
     }
 
     @Override
@@ -45,18 +46,22 @@ public class BulletinServiceImpl implements BulletinService {
     public BulletinDto createOrUpdateBulletin(BulletinDto bulletinDto) throws EntityNotFoundException {
         User user = userRepository.findById(bulletinDto.getAuthor().getId())
                 .orElseThrow(()->new EntityNotFoundException(String.format("user with id: %s not found", bulletinDto.getAuthor().getId())));
-        Bulletin bulletin = new Bulletin(bulletinDto.getId(),
-                bulletinDto.getTitle(),
-                bulletinDto.getDescription(),
-                bulletinDto.getStartDate(),
-                bulletinDto.getImage(),
-                user);
-        if (validator.validate(bulletin).size() == 0) {
-            bulletinRepository.save(bulletin);
-            return mapToBulletinDto.apply(bulletin);
+        Optional<Bulletin> bulletinOptional = bulletinRepository.findById(bulletinDto.getId());
+
+        if(bulletinOptional.isEmpty()){
+            Bulletin bulletin = new Bulletin(bulletinDto.getId(),
+                    bulletinDto.getTitle(),
+                    bulletinDto.getDescription(),
+                    bulletinDto.getStartDate(),
+                    bulletinDto.getImage(),
+                    user);
+            if (validator.validate(bulletin).size() == 0) {
+                bulletinRepository.save(bulletin);
+                return mapToBulletinDto.apply(bulletin);
+            }
         }
-        bulletinRepository.save(bulletin);
-        return mapToBulletinDto.apply(bulletin);
+        bulletinRepository.save(bulletinOptional.get());
+        return mapToBulletinDto.apply(bulletinOptional.get());
     }
 
 

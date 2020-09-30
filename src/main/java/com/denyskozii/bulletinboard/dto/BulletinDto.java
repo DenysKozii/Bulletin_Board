@@ -25,7 +25,7 @@ import java.time.LocalDate;
 public class BulletinDto {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private long id;
+    private Long id;
 
     private String title;
 

@@ -68,11 +68,32 @@ a.badge.badge-primary {
 .card {
     margin-top: 30px;
     background: lightgray;
+    width: 1000px;
+    height: 140px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.details {
+    height: 100%;
+    width: 60%;
+}
+.image {
+    width: 40%;
+    height: 100%;
+}
+.image img{
+    width: auto;
+    height: 100%;
+}
+.file {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
 }
 
-.details {
-    width: 70%;
-}
 .title {
     padding: 10px;
     font-size: 24px;

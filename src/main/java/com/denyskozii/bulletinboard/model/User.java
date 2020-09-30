@@ -17,10 +17,10 @@ import java.util.List;
  */
 @Entity
 @Data
-@Table(name = "user")
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
+@Table(name = "user")
 public class User {
 
     @Id
