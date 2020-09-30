@@ -14,16 +14,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.validation.Valid;
 
 /**
+ * Spring Controller for registration new users
+ *
  * Date: 28.09.2020
  *
  * @author Denys Kozii
  */
 @Controller
 @Slf4j
-public class LoginController {
+public class RegistrationController {
     @Autowired
     UserService userService;
 
+    /**
+     * Registration for new users. Checking if information is correct
+     *
+     * @param user
+     * @param errors
+     * @param model
+     * @return String
+     */
     @PostMapping("/registration")
     public String addUser(@Valid UserDto user, Errors errors, Model model) {
         log.info("Register user " + user);

@@ -11,7 +11,17 @@ import org.springframework.data.domain.PageRequest;
  * @author Denys Kozii
  */
 public interface BulletinService {
+    /**
+     * Create new bulletin, or update existing with new data
+     * @param bulletinDto
+     * @return <code>bulletinDto</code> bulletin
+     */
     BulletinDto createOrUpdateBulletin(BulletinDto bulletinDto);
 
+    /**
+     * Return page with information about all bulletins
+     * @param pagesRequest
+     * @return <code>pagesRequest</code> bulletin
+     */
     Page<Bulletin> getPage(PageRequest pagesRequest);
 }

@@ -11,6 +11,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 
 /**
+ * Spring Controller with exception handling
+ *
  * Date: 28.09.2020
  *
  * @author Denys Kozii
@@ -19,7 +21,12 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class ControllerExceptionHandler {
 
-
+    /**
+     * Catching EntityNotFoundException
+     * @param request
+     * @param e
+     * @return <code>ModelAndView</code>
+     */
     @ExceptionHandler(EntityNotFoundException.class)
     public ModelAndView handleNotFoundException(HttpServletRequest request,
                                                 Exception e) {
@@ -30,6 +37,12 @@ public class ControllerExceptionHandler {
         return modelAndView;
     }
 
+    /**
+     * Catching DataIntegrityViolationException
+     * @param request
+     * @param e
+     * @return <code>ModelAndView</code>
+     */
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ModelAndView handleDataIntegrityViolationException(HttpServletRequest request,
                                                 Exception e) {

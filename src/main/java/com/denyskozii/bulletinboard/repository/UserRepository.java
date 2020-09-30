@@ -14,7 +14,11 @@ import javax.validation.constraints.Email;
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-
+    /**
+     * Searching user by his email
+     * @param email
+     * @return <code>email</code> user
+     */
     User findByEmail(@Email(message = "Wrong email format") String email);
 
 }

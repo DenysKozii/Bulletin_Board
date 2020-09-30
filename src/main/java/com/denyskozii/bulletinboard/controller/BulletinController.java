@@ -48,6 +48,13 @@ public class BulletinController {
         this.bulletinService = bulletinService;
     }
 
+    /**
+     * Generate pages with 10 bulletins and pagination
+     *
+     * @param model
+     * @param pageIndex
+     * @return String
+     */
     @GetMapping
     public String showPage(Model model, @RequestParam(defaultValue = "1") int pageIndex) {
         PageRequest pagesRequest = PageRequest.of(pageIndex-1,pageSize,Sort.Direction.DESC,"id");
@@ -57,6 +64,17 @@ public class BulletinController {
         return "bulletin/list";
     }
 
+    /**
+     * Saving new bulletin with information
+     *
+     * @param bulletinDto
+     * @param request
+     * @param bindingResult
+     * @param multipartFile
+     * @param model
+     * @return String
+     * @throws IOException
+     */
     @PostMapping("/add")
     public String createBulletin(@Valid @ModelAttribute BulletinDto bulletinDto,
                                  HttpServletRequest request,

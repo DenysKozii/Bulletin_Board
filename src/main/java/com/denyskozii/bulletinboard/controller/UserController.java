@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
+ * Spring Controller that handles users (Account, Edit)
+ *
  * Date: 28.09.2020
  *
  * @author Denys Kozii
@@ -37,6 +39,13 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * Shows information about user by HttpServletRequest
+     *
+     * @param request
+     * @param model
+     * @return String
+     */
     @GetMapping
     public String account(HttpServletRequest request, Model model) {
         log.info("controller account");
@@ -47,6 +56,13 @@ public class UserController {
         return "user/account";
     }
 
+    /**
+     * Updating user with new information
+     *
+     * @param userDto
+     * @param bindingResult
+     * @return String
+     */
     @PostMapping("/edit")
     public String editUserFormSubmit(@Valid @ModelAttribute("user") UserDto userDto,
                                         BindingResult bindingResult) {
