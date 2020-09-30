@@ -1,4 +1,4 @@
-Bulletin Board
+# Bulletin Board
 
 Application for posting and reading bulletins in the easiest way. 
 Your account will be in safe because of encrypting all passwords!
